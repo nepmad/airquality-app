@@ -117,6 +117,7 @@ fun UtilityScreen(viewModel: UtilityViewModel, settingsViewModel: SettingsViewMo
             }
             is UtilityUiState.Success -> {
                 val reading = currentState.data.current
+                // Treat missing or negative indices as unavailable rather than as good air quality.
                 val aqi = (if (european) reading?.europeanAqi else reading?.usAqi)?.takeIf { it >= 0 }
                 val (category, color) = if (european) getEuropeanAqiCategory(aqi) else getAqiCategory(aqi)
                 run {
@@ -220,7 +221,7 @@ private fun ParameterTile(title: String, value: Double?, unit: String, icon: Ima
     }
 }
 
-// Helper mapping AQI score to label and associated color code
+// US and European AQI use different bands; select the helper matching the displayed scale.
 fun getAqiCategory(aqi: Int?): Pair<String, Color> {
     return when {
         aqi == null || aqi < 0 -> "Unavailable" to Color.Gray
