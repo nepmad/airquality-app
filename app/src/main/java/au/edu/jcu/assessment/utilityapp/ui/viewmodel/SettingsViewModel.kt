@@ -10,9 +10,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class SettingsViewModel : ViewModel() {
+    // Both screens observe this shared state; expose a read-only flow to callers.
     private val _settings = MutableStateFlow(UserSettings())
     val settings: StateFlow<UserSettings> = _settings.asStateFlow()
 
+    // Fixed coordinates allow city selection without requesting device location permission.
     val availableCities = listOf(
         CityLocation("Kathmandu", 27.7172, 85.3240),
         CityLocation("Brisbane", -27.4705, 153.0260),
