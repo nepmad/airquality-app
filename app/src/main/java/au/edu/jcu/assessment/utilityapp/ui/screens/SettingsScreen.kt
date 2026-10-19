@@ -27,6 +27,7 @@ fun SettingsScreen(
 
     Scaffold(
         modifier = modifier,
+        // The outer navigation Scaffold already supplies system-bar padding.
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             TopAppBar(
@@ -97,6 +98,7 @@ fun SettingsScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text("Use European AQI Standard", modifier = Modifier.weight(1f))
+                        // This chooses which returned AQI field to display, not a unit conversion.
                         Switch(
                             checked = settings.aqiStandard == AqiStandard.EUROPEAN_CAQI,
                             onCheckedChange = { checked ->
