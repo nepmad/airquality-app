@@ -80,6 +80,7 @@ fun UtilityScreen(viewModel: UtilityViewModel, settingsViewModel: SettingsViewMo
                   modifier: Modifier = Modifier) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val settings by settingsViewModel.settings.collectAsStateWithLifecycle()
+    // Fetch on entry and city changes; ordinary recomposition does not restart this effect.
     LaunchedEffect(settings.selectedCity) {
         viewModel.loadDataForCity(settings.selectedCity)
     }
