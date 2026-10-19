@@ -25,10 +25,12 @@ class UtilityViewModel(
     private var loadJob: Job? = null
 
     fun loadDataForCity(city: CityLocation) {
+        // A newer city selection or refresh supersedes the previous request.
         loadJob?.cancel()
         loadJob = viewModelScope.launch {
             _uiState.value = UtilityUiState.Loading
             val result = repository.fetchAirQuality(city.lat, city.lon)
+            // Do not publish a result if this job was cancelled while awaiting the repository.
             coroutineContext.ensureActive()
             result.onSuccess { response ->
                 val timeFormat = SimpleDateFormat("hh:mm a, dd MMM", Locale.getDefault())
