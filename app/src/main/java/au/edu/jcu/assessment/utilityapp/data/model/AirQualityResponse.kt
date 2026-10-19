@@ -8,6 +8,7 @@ data class AirQualityResponse(
     @SerializedName("current") val current: CurrentAirQuality?
 )
 
+// Nullable measurements represent missing API data, not a zero concentration or index.
 data class CurrentAirQuality(
     @SerializedName("time") val time: String,
     @SerializedName("interval") val interval: Int,
@@ -19,6 +20,7 @@ data class CurrentAirQuality(
     @SerializedName("uv_index") val uvIndex: Double?
 )
 
+// EUROPEAN_CAQI is the existing identifier; it selects Open-Meteo European AQI, not CAQI.
 enum class AqiStandard { US_AQI, EUROPEAN_CAQI }
 
 data class CityLocation(
@@ -27,6 +29,7 @@ data class CityLocation(
     val lon: Double
 )
 
+// Defaults are held in memory by SettingsViewModel; no on-device persistence is configured.
 data class UserSettings(
     val selectedCity: CityLocation = CityLocation("Kathmandu", 27.7172, 85.3240),
     val aqiStandard: AqiStandard = AqiStandard.US_AQI,
