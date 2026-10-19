@@ -54,7 +54,7 @@ private fun SkyPage(title: String, modifier: Modifier, onRefresh: (() -> Unit)? 
         }
     ) { padding ->
         Box(Modifier.fillMaxSize().padding(padding).background(SkyGradient)) {
-            // Soft cloud shapes echo the references without external bitmap assets.
+            // Draw decorative clouds relative to the canvas size so they scale with the screen.
             Canvas(Modifier.fillMaxSize()) {
                 val cloud = Color.White.copy(alpha = 0.19f)
                 listOf(Offset(size.width * .12f, size.height * .13f),
@@ -213,6 +213,7 @@ private fun WhitePanel(content: @Composable ColumnScope.() -> Unit) {
 private fun ParameterTile(title: String, value: Double?, unit: String, icon: ImageVector, modifier: Modifier) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Icon(icon, null, tint = AirPulseBlue, modifier = Modifier.size(28.dp))
+        // Format available readings for the device locale; keep missing values visibly unavailable.
         Text(value?.let { String.format(java.util.Locale.getDefault(), "%.1f", it) } ?: "Unavailable",
             style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = Ink)
         Text(if (unit.isEmpty()) title else "$title · $unit", color = Ink,
