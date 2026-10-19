@@ -1,55 +1,59 @@
-# MobileTech Utility App
+# AirPulse — Air Quality App
 
-This is a basic Android app template for **Assessment 1: Utility App**.
-It provides the structure for a simple tabular UI using **Jetpack Compose** and **Material Design 3**.
+An Android utility app built from the CP3406 / CP5307 starter template using Kotlin, Jetpack Compose and Material Design 3. It retains the single-activity structure and bottom navigation between AirPulse and Settings.
 
----
+## Features
 
-## Getting Started
+- A brief in-app splash screen.
+- Model-derived air quality for Kathmandu, Brisbane, Sydney, London and Tokyo.
+- City selection from the home screen or Settings.
+- US and European AQI displays with category labels and general activity advice.
+- PM2.5, PM10, dust and UV index readings when supplied by the API.
+- Manual refresh, loading feedback and retry after errors.
 
-### How to Run
-1. Clone or download this repo  
-2. Open in Android Studio  
-3. Run on an emulator or physical device (API 26+ recommended)  
+## Run the project
 
----
+1. Open the project root in Android Studio.
+2. Install Android SDK 36 and use a compatible Gradle JDK (JDK 17 or later, subject to the configured Gradle toolchain).
+3. Sync Gradle, then run on an emulator or device running Android 8.0 / API 26 or later.
 
-## Composables
+The Gradle wrapper is included. From the project root, use:
 
-### UtilityApp()
-- Contains the screen layout using a Scaffold
-- Toggles content between Utility and Settings
+```bash
+./gradlew assembleDebug
+./gradlew testDebugUnitTest
+./gradlew lintDebug
+```
 
-### UtilityScreen()
-- Displays a simple counter (replace with your utility logic)  
-- Includes a button to increment the counter
+Internet access is required for dependency downloads and air quality requests. The current API setup requires no API key.
 
-### SettingsScreen()
-- Placeholder for user preferences or configuration  
-- Can be extended to modify main screen behavior (e.g., theme, units, limits)  
+## Code structure
 
----
+| Existing location | Responsibility |
+| --- | --- |
+| `MainActivity.kt` | Activity setup and in-app splash |
+| `ui/UtilityApp.kt` | Bottom navigation and shared ViewModels |
+| `ui/screens/` | Air quality display, city picker and settings |
+| `ui/viewmodel/` | Settings state, request lifecycle and loading/result/error state |
+| `data/api/` | Retrofit interface and shared HTTP client |
+| `data/model/` | API response and settings models |
+| `data/repository/` | Fetching, response validation and error handling |
+| `ui/theme/` | Starter Compose theme resources |
 
-## Key Concepts Covered
+## Data and behaviour
 
-| Week | Concept                        | Used In                          |
-|------|--------------------------------|----------------------------------|
-| 1    | Kotlin + Android Studio         | MainActivity.kt |
-| 2    | Jetpack Compose Layouts         | UtilityApp(), UtilityScreen(), SettingsScreen()   |
-| 3    | Material Design 3               | MobileTechUtilityAppTheme, MaterialTheme.typography |
-| 4    | ViewModel | Not included in starter          |
-| 5    | Retrofit  | Not included in starter          |
+Data comes from [Open-Meteo Air Quality](https://air-quality-api.open-meteo.com/) / CAMS and represents model-derived conditions. Both AQI fields are requested together; changing the standard selects the corresponding returned field. The existing `EUROPEAN_CAQI` enum name refers to the European AQI field in this implementation.
 
----
+Missing readings display as unavailable. “Fetched” shows the local request-completion time, which is separate from the API observation time. Selecting another city cancels the previous request to prevent an obsolete result from updating the display.
 
-## Suggested Extensions
-- Replace counter with a real utility (e.g., hydration tracker, timer)  
-- Add a ViewModel for state management  
-- Use SharedPreferences or DataStore to persist settings  
-- Add a simple API call using Retrofit (e.g., fetch weather or quotes)  
+Settings are held in memory and are not persisted across a fresh app launch. The `autoRefresh` model property is not wired to a periodic refresh task or a settings control. Readings load on entering the home screen, changing city, or requesting a manual refresh.
 
----
+## Verification and history
 
-## 📚 License
-This template is provided for educational use in CP3406.  
-Feel free to modify and extend it for your assessment.
+The included unit and instrumented tests are starter examples; they do not validate the air quality calculations or complete user flows. A full Android build and device check are still required before submission.
+
+The project was imported from the supplied ZIP in grouped commits, followed by code-comment and documentation commits. Those import commits record existing work and do not represent an earlier development timeline.
+
+## Template acknowledgement
+
+Based on the MobileTech Utility App educational starter supplied for CP3406 / CP5307. Existing project filenames and source structure are retained.
