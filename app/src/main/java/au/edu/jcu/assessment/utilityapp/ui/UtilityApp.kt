@@ -23,6 +23,7 @@ fun UtilityApp(
     utilityViewModel: UtilityViewModel = viewModel(),
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
+    // Preserve the selected tab across recreation without adding a navigation back stack.
     var currentScreen by rememberSaveable { mutableStateOf(AppScreen.UTILITY) }
 
     Scaffold(
@@ -51,6 +52,7 @@ fun UtilityApp(
             }
         }
     ) { innerPadding ->
+        // Keep both ViewModels above the screen switch so the tabs share the same instances.
         when (currentScreen) {
             AppScreen.UTILITY -> UtilityScreen(
                 viewModel = utilityViewModel,
