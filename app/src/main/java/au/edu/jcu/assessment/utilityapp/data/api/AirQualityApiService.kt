@@ -4,6 +4,7 @@ import au.edu.jcu.assessment.utilityapp.data.model.AirQualityResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+// Request both AQI scales together so switching the display does not require another call.
 interface AirQualityApiService {
     @GET("v1/air-quality")
     suspend fun getAirQuality(
