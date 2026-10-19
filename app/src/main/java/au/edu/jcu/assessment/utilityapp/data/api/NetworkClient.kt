@@ -13,12 +13,14 @@ object NetworkClient {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
+    // Bound connection and read waits so a stalled request can reach the error UI.
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .connectTimeout(15, TimeUnit.SECONDS)
         .readTimeout(15, TimeUnit.SECONDS)
         .build()
 
+    // Reuse one service and HTTP connection pool; initialise them on first use.
     val apiService: AirQualityApiService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
