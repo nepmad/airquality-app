@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     // Save the launch state so rotating the device does not replay the splash.
                     var showSplash by rememberSaveable { mutableStateOf(true) }
+                    // This delay controls the in-app introduction, independently of network loading.
                     LaunchedEffect(Unit) {
                         delay(1000)
                         showSplash = false
