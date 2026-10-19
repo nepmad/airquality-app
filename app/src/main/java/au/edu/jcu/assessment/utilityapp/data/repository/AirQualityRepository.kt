@@ -15,9 +15,11 @@ class AirQualityRepository(
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getAirQuality(latitude = lat, longitude = lon)
+                // A successful HTTP response can still lack the readings required by the screen.
                 checkNotNull(response.current) { "No current air quality data is available." }
                 Result.success(response)
             } catch (cancelled: CancellationException) {
+                // Propagate cancellation so an obsolete city request cannot become a UI error.
                 throw cancelled
             } catch (error: Exception) {
                 Result.failure(error)
